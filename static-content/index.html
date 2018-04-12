@@ -6,7 +6,6 @@
 
 			// Socket Stuff.
 			var socket;
-			var board=[1,1,1,0,-1,-1,-1];
 
 			$(function(){
 				socket = new WebSocket("ws://cslinux.utm.utoronto.ca:10311");
@@ -17,57 +16,35 @@
 					console.log("disconnected");
 				};
 				socket.onmessage = function (event) {
-					console.log("receiving");
+					
+					// Parse Incoming JSON data.
+					var jsonData = JSON.parse(event.data);
+					var board = jsonData.board;
+
+					// To initialize the board images.
+					var index = 0;
+					
+					if (board != undefined) {
+						for (index; index < board.length; index++) {
+							var tile = document.getElementById('square'+index);
+							if (board[index] == -1) {
+								tile.src = "images/greenFrog.gif";
+							}
+							else if (board[index] == 0) {
+								tile.src = "images/empty.gif";
+							}
+							else {
+								tile.src = "images/yellowFrog.gif";
+							}
+						}
+					} 
 				}
 			});
 
+			// Send move command on tile i.
 			function clickSquare(i) {
 				socket.send(JSON.stringify({'move': i}));
-				alert(""+i);
 			}
-
-			/*
-			function clickSquare(i){
-
-				if(move(i,i+board[i]))return;
-				move(i,i+2*board[i]);
-
-				isWon();
-			}
-
-			function move(i,j){
-
-				if (isEmpty(j) == true) {
-					var s1 = document.getElementById('square'+i);
-					var s2 = document.getElementById('square'+j);
-					var tempImg = document.getElementById('square'+i).src;
-					s1.src = s2.src;
-					s2.src = tempImg;
-					var tempBoard = board[i];
-					board[i] = board[j];
-					board[j] = tempBoard;
-					return true;
-				}
-				else {
-					return false;
-				}
-			}
-
-			function isEmpty(i){
-				if (board[i] == 0) {
-					return true;
-				}
-				else {
-					return false;
-				}
-			}
-
-			// return whether the user has won the game
-			function isWon(){
-				if ((board[0] == -1) && (board[1] == -1) && (board[2] == -1)) {
-					alert("You win");
-				}
-			} */
 
 		</script>
 	</head>

@@ -23,21 +23,19 @@
 
 					// To initialize the board images.
 					var index = 0;
-					
-					if (board != undefined) {
-						for (index; index < board.length; index++) {
-							var tile = document.getElementById('square'+index);
-							if (board[index] == -1) {
-								tile.src = "images/greenFrog.gif";
-							}
-							else if (board[index] == 0) {
-								tile.src = "images/empty.gif";
-							}
-							else {
-								tile.src = "images/yellowFrog.gif";
-							}
+
+					for (index; index < board.length; index++) {
+						var tile = document.getElementById('square'+index);
+						if (board[index] == -1) {
+							tile.src = "images/greenFrog.gif";
 						}
-					} 
+						else if (board[index] == 0) {
+							tile.src = "images/empty.gif";
+						}
+						else {
+							tile.src = "images/yellowFrog.gif";
+						}
+					}
 				}
 			});
 

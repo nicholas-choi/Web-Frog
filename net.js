@@ -13,9 +13,9 @@ wss.on('close', function() {
     console.log('disconnected');
 });
 
-wss.broadcast = function(data){
+wss.broadcast = function(message){
     for (let ws of this.clients){
-    	ws.send(JSON.stringify(data));
+    	ws.send(message);
     }
 }
 
@@ -28,17 +28,17 @@ wss.on('connection', function(ws) {
     ws.on('message', function(event) {
     	var jsonData = JSON.parse(event);
     	clickSquare(jsonData.move);
-    	ws.send(JSON.stringify({'board': board}));
+    	var JSONsend = {'board': board};
+    	wss.broadcast(JSON.stringify({'board': board}));
     });
 }); 
 
 
 function clickSquare(i){
-	console.log(""+i);
 	if(move(i,i+board[i]))return;
 	move(i,i+2*board[i]);
 
-	// isWon();
+	//isWon();
 }
 
 /* Return true if moved, false otherwise. */
@@ -47,7 +47,6 @@ function move(i,j){
 		var temp = board[i];
 		board[i] = board[j];
 		board[j] = temp;
-		wss.broadcast(JSON.stringify({'board': board}))
 		return true;
 	}
 	else {
